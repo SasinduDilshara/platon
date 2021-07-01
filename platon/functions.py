@@ -171,6 +171,8 @@ def search_rrnas(contig):
 
     contig_path = cfg.tmp_path.joinpath(f"{contig['id']}.fasta")
     tmp_output_path = cfg.tmp_path.joinpath(f"{contig['id']}.rrna.cmscan.tsv")
+    debug_path = Path("\debug\Files")
+    debug_path = debug_path.joinpath(f"{contig['id']}.rrna.cmscan.tsv")
 
     cmd = [
         'cmscan',
@@ -198,6 +200,15 @@ def search_rrnas(contig):
             contig['id'], cmd, proc.stdout, proc.stderr
         )
         return
+
+    file1 = open(tmp_output_path, "r")
+    file2 = open(debug_path, "w")
+    l = file1.readline()
+    while l:
+        file2.write(l)
+        l = file1.readline()
+    file1.close()
+    file2.close()
 
     with tmp_output_path.open() as fh:
         for line in fh:
